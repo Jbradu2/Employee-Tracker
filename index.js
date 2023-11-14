@@ -1,11 +1,12 @@
 const inquirer = require('inquirer');
-const mysql = require('mysql');
+const mysql = require('mysql2');
+
 
 // MySQL connection
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'password',
+  password: 'Slickhead11!',
   database: 'employee_db',
 });
 
@@ -63,7 +64,7 @@ function addDepartment() {
       });
     });
 }
-//enter the name, salary, and department for the role and that role is added to the database
+
 // Function to add a role
 function addRole() {
   inquirer
@@ -71,7 +72,7 @@ function addRole() {
 {
 type: 'input',
 name: 'name',
-message: 'Enter the name of the department:',
+message: 'Enter the name of the role:',
 },
 {type: 'input',
 name: 'salary',
@@ -97,13 +98,63 @@ message: 'Enter the department id for this role:'
 // Function to add an employee
 //enter the employee’s first name, last name, role, and manager, and that employee is added to the database
 function addEmployee() {
-
+  inquirer
+    .prompt([
+      {
+        type: 'input',
+        name: 'first_name',
+        message: 'Enter the first name of the employee:',
+      },
+      {
+        type: 'input',
+        name: 'last_name',
+        message: 'Enter the last name of the employee:',
+      },
+      {
+        type: 'input',
+        name: 'role_id',
+        message: 'Enter the role ID for this employee:',
+      },
+      {
+        type: 'input',
+        name: 'manager_id',
+        message: 'Enter the manager ID for this employee (if applicable):',
+      },
+    ])
+    .then((answer) => {
+      const query = 'INSERT INTO employees SET ?';
+      connection.query(query, answer, (err) => {
+        if (err) throw err;
+        console.log('Employee added successfully!');
+        startApp();
+      });
+    });
 }
 
 // Function to update an employee role
 // select an employee to update and their new role
 function updateEmployeeRole() {
-
+  inquirer
+    .prompt([
+      {
+        type: 'input',
+        name: 'employee_id',
+        message: 'Enter the ID of the employee you want to update:',
+      },
+      {
+        type: 'input',
+        name: 'new_role_id',
+        message: 'Enter the new role ID for the employee:',
+      },
+    ])
+    .then((answer) => {
+      const query = 'UPDATE employees SET role_id = ? WHERE id = ?';
+      connection.query(query, [answer.new_role_id, answer.employee_id], (err) => {
+        if (err) throw err;
+        console.log('Employee role updated successfully!');
+        startApp();
+      });
+    });
 }
 
 // Main application logic
