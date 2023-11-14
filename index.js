@@ -63,18 +63,45 @@ function addDepartment() {
       });
     });
 }
-
+//enter the name, salary, and department for the role and that role is added to the database
 // Function to add a role
 function addRole() {
-
+  inquirer
+  .prompt([
+{
+type: 'input',
+name: 'name',
+message: 'Enter the name of the department:',
+},
+{type: 'input',
+name: 'salary',
+message: 'Enter the salary for this role:',
+},
+{
+type: 'input',
+name: 'department_id',
+message: 'Enter the department id for this role:'
+},
+  ])
+.then((answer) => {
+  const query = 'INSERT INTO roles SET ?';
+  connection.query(query, answer, (err) => {
+    if (err) throw err;
+    console.log('Role added successfully!');
+    startApp();
+  });
+});
 }
 
+
 // Function to add an employee
+//enter the employee’s first name, last name, role, and manager, and that employee is added to the database
 function addEmployee() {
 
 }
 
 // Function to update an employee role
+// select an employee to update and their new role
 function updateEmployeeRole() {
 
 }
@@ -96,6 +123,8 @@ function startApp() {
         'Update an employee role',
         'Exit',
       ],
+
+
     })
     .then((answer) => {
       switch (answer.action) {
