@@ -44,7 +44,9 @@ function viewAllEmployees() {
   const query = 'SELECT * FROM employees';
   connection.query(query, (err, results) => {
     if (err) throw err;
+    
     console.table(results);
+
     startApp();
   });
 }
